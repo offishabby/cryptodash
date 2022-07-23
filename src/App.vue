@@ -136,6 +136,7 @@ export default {
       filter: "",
 
       tickers: [],
+
       selectedTicker: null,
 
       graph: [],
@@ -190,7 +191,7 @@ export default {
 
   computed: {
     tooManyTickersAdded() {
-      return this.tickers.length > 4;
+      return this.tickers.length > 24;
     },
 
     startIndex() {
@@ -266,7 +267,7 @@ export default {
 
     add(ticker) {
       const currentTicker = {
-        name: ticker,
+        name: ticker.toUpperCase(),
         price: "-"
       };
 
