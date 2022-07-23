@@ -1,0 +1,27 @@
+
+/*
+These styles change scrollbar
+colors (I didn't find the way 
+to change it with tailwind) 
+*/
+
+/* Works on Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3E3D41 #67656C;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #3E3D41;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #3E3D41;
+  border-radius: 20px;
+  border: 3px solid #67656C;
+}
