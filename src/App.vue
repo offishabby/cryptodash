@@ -1,5 +1,5 @@
 <template>
-  <div class="min-w-screen min-h-screen bg-gray-800">
+  <div class="min-w-screen min-h-screen bg-gray-800 p-10">
     <div class="container mx-auto flex flex-col items-center p-4">
       <div class="container">
         <div class="w-full my-4"></div>
@@ -83,8 +83,11 @@
             <div
               v-for="(bar, idx) in normalizedGraph"
               :key="idx"
-              :style="{ height: `${bar}%` }"
-              class="bg-purple-600 w-10 border-2 border-gray-800"
+              :style="{
+                height: `${bar}%`,
+                opacity: `${bar}%`
+              }"
+              class="bg-red-500 w-10 border-2 border-gray-800"
             ></div>
           </div>
           <button
@@ -240,6 +243,7 @@ export default {
         return;
       }
 
+      // 38px doesn't make a big sense
       this.maxGraphElements = this.$refs.graph.clientWidth / 38;
     },
 
