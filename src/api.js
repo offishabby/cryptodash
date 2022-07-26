@@ -51,6 +51,22 @@ function unsubscribeFromTickerOnWs(ticker) {
   });
 }
 
+// get list of all ticker to make suggestions
+const axios = require("axios");
+
+async function getTickers() {
+  try {
+    const response = await axios.get(
+      "https://min-api.cryptocompare.com/data/all/coinlist?summary=true"
+    );
+    return Object.keys(response.data.Data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export { getTickers };
+
 export const subscribeToTicker = (ticker, cb) => {
   const subscribers = tickersHandlers.get(ticker) || [];
   tickersHandlers.set(ticker, [...subscribers, cb]);

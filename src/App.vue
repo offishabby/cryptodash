@@ -2,8 +2,14 @@
   <div class="min-w-screen min-h-screen bg-gray-800 p-10">
     <div class="container mx-auto flex flex-col items-center p-4">
       <div class="container">
-        <div class="w-full my-4"></div>
-        <add-ticker @add-ticker="add" :disabled="tooManyTickersAdded" />
+        <add-ticker
+          @add-ticker="add"
+          @val-change="valMessage = ''"
+          :disabled="tooManyTickersAdded"
+          :val-message="valMessage"
+          @input="valMessage = ''"
+          @put-suggested="valMessage = ''"
+        />
         <template v-if="tickers.length">
           <hr class="w-full border-t border-gray-600 my-4" />
           <div>
@@ -21,12 +27,21 @@
             >
               Forward
             </button>
-            <div class="text-gray-200">
-              Filter:
-              <input
-                v-model="filter"
-                class="pr-10 border-gray-700 text-gray-100 focus:outline-none focus:ring-gray-500 sm:text-sm rounded-md bg-gray-500 caret-transparent"
-              />
+
+            <div class="flex">
+              <div class="max-w-xs">
+                <label
+                  for="filter"
+                  class="block text-sm font-medium text-gray-200"
+                  >Filter</label
+                >
+                <div class="mt-1 relative rounded-md shadow-md">
+                  <input
+                    v-model="filter"
+                    class="pr-10 p-3 border-gray-700 text-gray-100 focus:outline-none focus:ring-gray-500 sm:text-sm rounded bg-gray-500 caret-transparent"
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <hr class="w-full border-t border-gray-600 my-4" />
@@ -137,8 +152,10 @@ export default {
   data() {
     return {
       filter: "",
+      valMessage: "",
 
       tickers: [],
+
       selectedTicker: null,
 
       graph: [],
@@ -193,7 +210,7 @@ export default {
 
   computed: {
     tooManyTickersAdded() {
-      return this.tickers.length > 4;
+      return this.tickers.length > 24;
     },
 
     startIndex() {
@@ -205,7 +222,9 @@ export default {
     },
 
     filteredTickers() {
-      return this.tickers.filter(ticker => ticker.name.includes(this.filter));
+      return this.tickers.filter(ticker =>
+        ticker.name.toLowerCase().includes(this.filter.toLowerCase())
+      );
     },
 
     paginatedTickers() {
@@ -269,8 +288,15 @@ export default {
     },
 
     add(ticker) {
+      if (
+        this.tickers.map(ticker => ticker.name).includes(ticker.toUpperCase())
+      ) {
+        this.valMessage = "This ticker is added";
+        return;
+      }
+
       const currentTicker = {
-        name: ticker,
+        name: ticker.toUpperCase(),
         price: "-"
       };
 
@@ -291,6 +317,7 @@ export default {
         this.selectedTicker = null;
       }
       unsubscribeFromTicker(tickerToRemove.name);
+      this.valMessage = "";
     }
   },
 
@@ -301,8 +328,8 @@ export default {
       this.$nextTick().then(this.calculateMaxGraphElements);
     },
 
-    tickers(newValue, oldValue) {
-      console.log(newValue === oldValue);
+    tickers() {
+      // console.log(newValue === oldValue);
       localStorage.setItem("cryptonomicon-list", JSON.stringify(this.tickers));
     },
 
@@ -326,5 +353,3 @@ export default {
   }
 };
 </script>
-
-<style></style>
