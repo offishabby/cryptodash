@@ -1,5 +1,5 @@
 <template>
-  <div class="min-w-screen min-h-screen bg-gray-800 p-10">
+  <div class="min-w-screen min-h-screen p-10">
     <div class="container mx-auto flex flex-col items-center p-4">
       <div class="container">
         <add-ticker
@@ -28,19 +28,17 @@
               Forward
             </button>
 
-            <div class="flex">
-              <div class="max-w-xs">
-                <label
-                  for="filter"
-                  class="block text-sm font-medium text-gray-200"
-                  >Filter</label
-                >
-                <div class="mt-1 relative rounded-md shadow-md">
-                  <input
-                    v-model="filter"
-                    class="pr-10 p-3 border-gray-700 text-gray-100 focus:outline-none focus:ring-gray-500 sm:text-sm rounded bg-gray-500 caret-transparent"
-                  />
-                </div>
+            <div class="flex flex-col max-w-xs">
+              <label
+                for="filter"
+                class="block text-sm font-medium text-gray-200"
+                >Filter</label
+              >
+              <div class="mt-1 relative rounded-md shadow-md">
+                <input
+                  v-model="filter"
+                  class="p-3 border-gray-700 text-gray-100 focus:outline-none focus:ring-gray-500 sm:text-sm rounded bg-gray-500 caret-transparent"
+                />
               </div>
             </div>
           </div>
@@ -99,10 +97,14 @@
               v-for="(bar, idx) in normalizedGraph"
               :key="idx"
               :style="{
-                height: `${bar}%`,
-                opacity: `${bar}%`
+                height: `${bar}%`
               }"
-              class="bg-red-500 w-10 border-2 border-gray-800"
+              :class="[
+                normalizedGraph[idx] > normalizedGraph[idx - 1] || idx === 0
+                  ? 'bg-green-700'
+                  : 'bg-red-500'
+              ]"
+              class="w-7 border-2 border-gray-800"
             ></div>
           </div>
           <button
@@ -153,6 +155,8 @@ export default {
     return {
       filter: "",
       valMessage: "",
+      // in px
+      graphBarWidth: 28,
 
       tickers: [],
 
@@ -202,10 +206,13 @@ export default {
 
   mounted() {
     window.addEventListener("resize", this.calculateMaxGraphElements);
+    // set bg color to full page
+    document.body.classList.add("bg-gray-800");
   },
 
   beforeUnmount() {
     window.removeEventListener("resize", this.calculateMaxGraphElements);
+    document.body.classList.remove("bg-gray-800");
   },
 
   computed: {
@@ -262,8 +269,7 @@ export default {
         return;
       }
 
-      // 38px doesn't make a big sense
-      this.maxGraphElements = this.$refs.graph.clientWidth / 38;
+      this.maxGraphElements = this.$refs.graph.clientWidth / this.graphBarWidth;
     },
 
     updateTicker(tickerName, price) {
@@ -287,16 +293,18 @@ export default {
       return price > 1 ? price.toFixed(2) : price.toPrecision(2);
     },
 
-    add(ticker) {
+    add(tickerName) {
       if (
-        this.tickers.map(ticker => ticker.name).includes(ticker.toUpperCase())
+        this.tickers
+          .map(ticker => ticker.name)
+          .includes(tickerName.toUpperCase())
       ) {
-        this.valMessage = "This ticker is added";
+        this.valMessage = `${tickerName} ticker is added`;
         return;
       }
 
       const currentTicker = {
-        name: ticker.toUpperCase(),
+        name: tickerName.toUpperCase(),
         price: "-"
       };
 
@@ -353,3 +361,5 @@ export default {
   }
 };
 </script>
+
+<style></style>
