@@ -28,16 +28,16 @@
               Forward
             </button>
 
-            <div class="flex flex-col max-w-xs">
+            <div class="flex flex-col">
               <label
                 for="filter"
                 class="block text-sm font-medium text-gray-200"
                 >Filter</label
               >
-              <div class="mt-1 relative rounded-md shadow-md">
+              <div class="mt-1 relative ">
                 <input
                   v-model="filter"
-                  class="p-3 border-gray-700 text-gray-100 focus:outline-none focus:ring-gray-500 sm:text-sm rounded bg-gray-500 caret-transparent"
+                  class="rounded-md shadow-md p-3 border-gray-700 text-gray-100 focus:outline-none focus:ring-gray-500 sm:text-sm rounded bg-gray-500 caret-transparent"
                 />
               </div>
             </div>
