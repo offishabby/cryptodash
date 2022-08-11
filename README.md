@@ -23,3 +23,6 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
+![cryptodash](https://user-images.githubusercontent.com/74458710/184254104-85103969-1287-432d-95c0-c877a3fec28c.png)
